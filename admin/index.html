@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Console — BGSS &amp; Associates</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/svg+xml" href="/assets/images/bgss-logo.svg">
+
+  <!-- Google Fonts: Fraunces & Inter (Exact Website Typography) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
+
+  <!-- Admin CSS -->
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════
+     LOGIN SCREEN
+══════════════════════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <img src="/assets/images/bgss-logo.svg" alt="BGSS &amp; Associates" class="login-logo-img">
+      <div class="login-logo-badge">
+        <span class="login-badge-pill">ADMIN CONSOLE</span>
+        <span class="login-badge-firm">Chartered Accountants</span>
+      </div>
+    </div>
+    <h1 class="login-title">Administrator Sign In</h1>
+    <p class="login-sub">Secure access to manage publications, partner thoughts, media and site settings.</p>
+    <form id="login-form" autocomplete="off">
+      <div class="login-field">
+        <label for="admin-pass">Admin Password</label>
+        <input type="password" id="admin-pass" placeholder="Enter admin password" autocomplete="current-password" autofocus>
+        <div class="login-error" id="login-error"></div>
+      </div>
+      <button type="submit" class="login-btn"><i class="fa-solid fa-right-to-bracket"></i> &nbsp;Sign In to Admin</button>
+    </form>
+    <p style="font-size:.75rem;color:var(--muted);margin-top:1.5rem;text-align:center;">
+      Default password: <code style="background:var(--crimson-pale);color:var(--crimson);border:1px solid var(--crimson-border);padding:.15rem .45rem;border-radius:4px;font-weight:600;">bgss@admin2024</code>
+    </p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     APP SHELL
+══════════════════════════════════════════════════════ -->
+<div id="app">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="/" target="_blank" class="sidebar-brand-link" title="Open BGSS Website in new tab">
+        <img src="/assets/images/bgss-logo-white.svg" alt="BGSS &amp; Associates" class="sidebar-brand-logo">
+      </a>
+      <div class="sidebar-brand-sub">
+        <span class="sidebar-sub-badge">ADMIN</span>
+        <span class="sidebar-firm-sub">Chartered Accountants</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-menu">
+      <div class="nav-section-title">Overview</div>
+      <button class="nav-item active" data-panel="dashboard">
+        <i class="fa-solid fa-gauge-high"></i> Dashboard
+      </button>
+
+      <div class="nav-section-title">Content</div>
+      <button class="nav-item" data-panel="thoughts">
+        <i class="fa-solid fa-quote-right"></i> Partner Thoughts
+      </button>
+
+      <div class="nav-section-title">Knowledge Bank</div>
+      <button class="nav-item" data-panel="ebooks">
+        <i class="fa-solid fa-book-open"></i> eBooks
+      </button>
+      <button class="nav-item" data-panel="presentations">
+        <i class="fa-solid fa-file-powerpoint"></i> Presentations
+      </button>
+      <button class="nav-item" data-panel="videos">
+        <i class="fa-brands fa-youtube"></i> YouTube Videos
+      </button>
+
+      <div class="nav-section-title">Communication</div>
+      <button class="nav-item" data-panel="enquiries">
+        <i class="fa-solid fa-inbox"></i> Enquiries
+        <span class="nav-badge" id="enquiries-badge" style="display:none">0</span>
+      </button>
+
+      <div class="nav-section-title">Configuration</div>
+      <button class="nav-item" data-panel="settings">
+        <i class="fa-solid fa-sliders"></i> Site Settings
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user-avatar">BA</div>
+      <div class="sidebar-user-info">
+        <span>BGSS Admin</span>
+        <small>Administrator</small>
+      </div>
+      <button class="sidebar-logout" onclick="logout()" title="Sign out"><i class="fa-solid fa-right-from-bracket"></i></button>
+    </div>
+  </aside>
+
+  <!-- ── MAIN CONTENT ── -->
+  <div class="main-content">
+
+    <!-- Top Bar -->
+    <header class="topbar">
+      <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <span class="topbar-title" id="topbar-title">Dashboard</span>
+      <div class="topbar-actions">
+        <button class="topbar-btn btn-outline" onclick="exportData()" title="Export all data as JSON">
+          <i class="fa-solid fa-download"></i> Export Data
+        </button>
+        <a href="/" target="_blank" class="topbar-view-site">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> View Site
+        </a>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <main class="page-content">
+
+      <!-- ════════════════════ DASHBOARD ════════════════════ -->
+      <section id="panel-dashboard" class="panel active">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Dashboard Overview</div>
+            <div class="section-sub">Welcome back. Manage your publications, partner perspectives and site settings.</div>
+          </div>
+        </div>
+
+        <!-- Quick Actions Bar -->
+        <div class="quick-actions-bar">
+          <button class="quick-action-card primary" onclick="openAddThought()">
+            <div class="qa-icon-wrap"><i class="fa-solid fa-quote-right"></i></div>
+            <div class="qa-content">
+              <strong>Add Partner Thought</strong>
+              <span>Publish quote to homepage</span>
+            </div>
+          </button>
+          <button class="quick-action-card" onclick="openAddVideo()">
+            <div class="qa-icon-wrap gold"><i class="fa-brands fa-youtube"></i></div>
+            <div class="qa-content">
+              <strong>Add YouTube Video</strong>
+              <span>Embed media lecture</span>
+            </div>
+          </button>
+          <button class="quick-action-card" onclick="openAddEbook()">
+            <div class="qa-icon-wrap ink"><i class="fa-solid fa-book-open"></i></div>
+            <div class="qa-content">
+              <strong>Upload eBook</strong>
+              <span>Add PDF monograph</span>
+            </div>
+          </button>
+          <button class="quick-action-card" onclick="openAddPres()">
+            <div class="qa-icon-wrap sage"><i class="fa-solid fa-file-powerpoint"></i></div>
+            <div class="qa-content">
+              <strong>Add Presentation</strong>
+              <span>Upload PPTX slide deck</span>
+            </div>
+          </button>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+          <div class="stat-card crimson">
+            <div class="stat-icon"><i class="fa-solid fa-quote-right"></i></div>
+            <div>
+              <div class="stat-num" id="stat-thoughts">0</div>
+              <div class="stat-label">Partner Thoughts</div>
+            </div>
+          </div>
+          <div class="stat-card ink">
+            <div class="stat-icon"><i class="fa-solid fa-book-open"></i></div>
+            <div>
+              <div class="stat-num" id="stat-ebooks">0</div>
+              <div class="stat-label">eBooks Published</div>
+            </div>
+          </div>
+          <div class="stat-card sage">
+            <div class="stat-icon"><i class="fa-solid fa-file-powerpoint"></i></div>
+            <div>
+              <div class="stat-num" id="stat-presentations">0</div>
+              <div class="stat-label">Presentations</div>
+            </div>
+          </div>
+          <div class="stat-card gold">
+            <div class="stat-icon"><i class="fa-brands fa-youtube"></i></div>
+            <div>
+              <div class="stat-num" id="stat-videos">0</div>
+              <div class="stat-label">YouTube Videos</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom grid -->
+        <div class="dashboard-grid">
+          <!-- Activity -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title"><i class="fa-solid fa-clock-rotate-left" style="color:var(--crimson)"></i> &nbsp;Recent Activity</span>
+            </div>
+            <div class="card-body" id="activity-log">
+              <div class="empty-state"><i class="fa-regular fa-clock"></i><p>No activity yet.</p></div>
+            </div>
+          </div>
+
+          <!-- Quick Config -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title"><i class="fa-solid fa-circle-info" style="color:var(--crimson)"></i> &nbsp;Active Communication Settings</span>
+              <button class="topbar-btn btn-outline btn-sm" onclick="navigate('settings')">
+                <i class="fa-solid fa-pen"></i> Edit Settings
+              </button>
+            </div>
+            <div class="card-body">
+              <table class="config-table">
+                <tr>
+                  <td class="cfg-label">Contact Email</td>
+                  <td class="cfg-val" id="dash-email">—</td>
+                </tr>
+                <tr>
+                  <td class="cfg-label">WhatsApp Direct</td>
+                  <td class="cfg-val" id="dash-wa">—</td>
+                </tr>
+                <tr>
+                  <td class="cfg-label">Office Telephone</td>
+                  <td class="cfg-val" id="dash-phone">+91 79 4890 4100</td>
+                </tr>
+                <tr>
+                  <td class="cfg-label">Office Location</td>
+                  <td class="cfg-val">Ahmedabad, Gujarat, India</td>
+                </tr>
+                <tr>
+                  <td class="cfg-label">EmailJS Gateway</td>
+                  <td class="cfg-val" id="dash-ejs">
+                    <span class="badge badge-draft">Not configured</span>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════════ PARTNER THOUGHTS ════════════════════ -->
+      <section id="panel-thoughts" class="panel">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Partner Thoughts &amp; Perspectives</div>
+            <div class="section-sub">Manage partner insights, quotes, and perspectives published on the website carousel.</div>
+          </div>
+          <button class="topbar-btn btn-primary" onclick="openAddThought()">
+            <i class="fa-solid fa-plus"></i> Add Thought
+          </button>
+        </div>
+
+        <!-- Search & Filter Toolbar -->
+        <div class="content-toolbar">
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="thoughts-search" placeholder="Search by partner name, category, or quote..." oninput="filterThoughts()">
+          </div>
+          <div class="filter-group">
+            <select id="thoughts-filter-category" class="filter-select" onchange="filterThoughts()">
+              <option value="">All Practice Categories</option>
+              <option value="Tax Advisory">Tax Advisory</option>
+              <option value="Tax Litigation">Tax Litigation</option>
+              <option value="Transfer Pricing">Transfer Pricing</option>
+              <option value="FEMA">FEMA &amp; Global Advisory</option>
+              <option value="M&A">Mergers &amp; Acquisitions</option>
+              <option value="General">General</option>
+            </select>
+            <select id="thoughts-filter-status" class="filter-select" onchange="filterThoughts()">
+              <option value="">All Statuses</option>
+              <option value="live">● Live on Site</option>
+              <option value="draft">○ Draft</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:1.5rem;" id="thoughts-grid">
+          <!-- Rendered by JS -->
+        </div>
+      </section>
+
+      <!-- ════════════════════ EBOOKS ════════════════════ -->
+      <section id="panel-ebooks" class="panel">
+        <div class="section-header">
+          <div>
+            <div class="section-title">eBook Library</div>
+            <div class="section-sub">Manage downloadable eBooks, monographs, and research bulletins.</div>
+          </div>
+          <button class="topbar-btn btn-primary" onclick="openAddEbook()">
+            <i class="fa-solid fa-plus"></i> Add eBook
+          </button>
+        </div>
+
+        <div class="content-toolbar">
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="ebooks-search" placeholder="Search eBooks by title or category..." oninput="filterEbooks()">
+          </div>
+        </div>
+
+        <div class="resource-grid" id="ebooks-grid"><!-- JS --></div>
+      </section>
+
+      <!-- ════════════════════ PRESENTATIONS ════════════════════ -->
+      <section id="panel-presentations" class="panel">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Presentations</div>
+            <div class="section-sub">Manage PowerPoint decks, slide shows, and seminar event files.</div>
+          </div>
+          <button class="topbar-btn btn-primary" onclick="openAddPres()">
+            <i class="fa-solid fa-plus"></i> Add Presentation
+          </button>
+        </div>
+
+        <div class="content-toolbar">
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="presentations-search" placeholder="Search presentations by title..." oninput="filterPresentations()">
+          </div>
+        </div>
+
+        <div class="resource-grid" id="presentations-grid"><!-- JS --></div>
+      </section>
+
+      <!-- ════════════════════ VIDEOS ════════════════════ -->
+      <section id="panel-videos" class="panel">
+        <div class="section-header">
+          <div>
+            <div class="section-title">YouTube Videos</div>
+            <div class="section-sub">Manage video lectures and webinar embeds published on the website.</div>
+          </div>
+          <button class="topbar-btn btn-primary" onclick="openAddVideo()">
+            <i class="fa-brands fa-youtube"></i> Add Video
+          </button>
+        </div>
+
+        <div class="content-toolbar">
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="videos-search" placeholder="Search videos by title or category..." oninput="filterVideos()">
+          </div>
+        </div>
+
+        <div class="resource-grid" id="videos-grid"><!-- JS --></div>
+      </section>
+
+      <!-- ════════════════════ ENQUIRIES ════════════════════ -->
+      <section id="panel-enquiries" class="panel">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Enquiries</div>
+            <div class="section-sub">View form submissions received via website contact forms.</div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Name</th><th>Email</th><th>Phone</th><th>Service</th><th>Date</th><th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="enquiries-tbody">
+              <tr><td colspan="6"><div class="empty-state"><i class="fa-solid fa-inbox"></i><p>No enquiries received yet.</p></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ════════════════════ SETTINGS ════════════════════ -->
+      <section id="panel-settings" class="panel">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Site Settings</div>
+            <div class="section-sub">Update contact details, EmailJS keys, and social links.</div>
+          </div>
+          <button class="topbar-btn btn-success" onclick="saveSettings()">
+            <i class="fa-solid fa-floppy-disk"></i> Save All Settings
+          </button>
+        </div>
+
+        <!-- Contact Details -->
+        <div class="settings-section">
+          <div class="settings-section-header">
+            <div class="settings-section-icon"><i class="fa-solid fa-address-card"></i></div>
+            <span class="settings-section-title">Contact &amp; Communication Details</span>
+          </div>
+          <div class="settings-section-body">
+            <div class="form-grid">
+              <div class="field">
+                <label for="set-email">Contact / Enquiry Email</label>
+                <input type="email" id="set-email" placeholder="devshah4689@gmail.com">
+                <span class="field-hint">All form enquiries are sent to this address.</span>
+              </div>
+              <div class="field">
+                <label for="set-wa">WhatsApp Number (with country code)</label>
+                <input type="text" id="set-wa" placeholder="916352392705">
+                <span class="field-hint">Include country code, no + or spaces. e.g. 916352392705</span>
+              </div>
+              <div class="field">
+                <label for="set-phone">Primary Phone</label>
+                <input type="text" id="set-phone" placeholder="+91 79 4890 4100">
+              </div>
+              <div class="field">
+                <label for="set-phone2">Secondary Phone</label>
+                <input type="text" id="set-phone2" placeholder="+91 90999 27783">
+              </div>
+              <div class="field form-span-2">
+                <label for="set-address">Office Address</label>
+                <textarea id="set-address" rows="2" placeholder="Full office address"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EmailJS -->
+        <div class="settings-section">
+          <div class="settings-section-header">
+            <div class="settings-section-icon"><i class="fa-solid fa-paper-plane"></i></div>
+            <span class="settings-section-title">EmailJS Configuration (for direct email delivery)</span>
+          </div>
+          <div class="settings-section-body">
+            <div style="background:var(--crimson-pale);border:1px solid var(--crimson-border);border-radius:8px;padding:1rem;margin-bottom:1.25rem;font-size:.82rem;color:var(--text);">
+              <strong><i class="fa-solid fa-circle-info" style="color:var(--crimson)"></i> Setup EmailJS:</strong>
+              Go to <a href="https://www.emailjs.com" target="_blank" style="color:var(--crimson);font-weight:700;">emailjs.com</a> → Sign Up Free → Add Gmail Service → Create Template → Copy these 3 keys below.
+            </div>
+            <div class="form-grid cols-3">
+              <div class="field">
+                <label for="set-ejs-key">Public Key</label>
+                <input type="text" id="set-ejs-key" placeholder="abc123XYZxxxxxxx">
+              </div>
+              <div class="field">
+                <label for="set-ejs-service">Service ID</label>
+                <input type="text" id="set-ejs-service" placeholder="service_xxxxxxx">
+              </div>
+              <div class="field">
+                <label for="set-ejs-tpl">Template ID</label>
+                <input type="text" id="set-ejs-tpl" placeholder="template_xxxxxxx">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Social -->
+        <div class="settings-section">
+          <div class="settings-section-header">
+            <div class="settings-section-icon"><i class="fa-solid fa-share-nodes"></i></div>
+            <span class="settings-section-title">Social Media Links</span>
+          </div>
+          <div class="settings-section-body">
+            <div class="form-grid">
+              <div class="field">
+                <label for="set-linkedin"><i class="fa-brands fa-linkedin" style="color:#0077b5"></i> &nbsp;LinkedIn URL</label>
+                <input type="url" id="set-linkedin" placeholder="https://linkedin.com/company/bgss-associates">
+              </div>
+              <div class="field">
+                <label for="set-twitter"><i class="fa-brands fa-x-twitter"></i> &nbsp;Twitter / X URL</label>
+                <input type="url" id="set-twitter" placeholder="https://twitter.com/BGSSAssociates">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Change Password -->
+        <div class="settings-section">
+          <div class="settings-section-header">
+            <div class="settings-section-icon"><i class="fa-solid fa-lock"></i></div>
+            <span class="settings-section-title">Change Admin Password</span>
+          </div>
+          <div class="settings-section-body">
+            <div class="form-grid">
+              <div class="field">
+                <label for="set-new-pass">New Password</label>
+                <input type="password" id="set-new-pass" placeholder="Enter new password">
+              </div>
+              <div class="field">
+                <label for="set-confirm-pass">Confirm Password</label>
+                <input type="password" id="set-confirm-pass" placeholder="Confirm new password">
+              </div>
+            </div>
+            <div style="margin-top:1rem;">
+              <button class="topbar-btn btn-primary" onclick="changePassword()">
+                <i class="fa-solid fa-key"></i> Update Password
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align:right;margin-top:1.5rem;">
+          <button class="topbar-btn btn-success" onclick="saveSettings()">
+            <i class="fa-solid fa-floppy-disk"></i> Save All Settings
+          </button>
+        </div>
+      </section>
+
+    </main><!-- /page-content -->
+  </div><!-- /main-content -->
+</div><!-- /#app -->
+
+<!-- ══════════════════════════════════════════════════════
+     TOAST CONTAINER
+══════════════════════════════════════════════════════ -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- ══════════════════════════════════════════════════════
+     CONFIRM MODAL
+══════════════════════════════════════════════════════ -->
+<div class="modal-backdrop" id="confirm-modal">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-header">
+      <h3 class="modal-title"><i class="fa-solid fa-triangle-exclamation" style="color:var(--crimson)"></i> &nbsp;Confirm Action</h3>
+      <button class="modal-close" id="confirm-close" aria-label="Close confirm dialog"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <p class="confirm-msg" id="confirm-msg">Are you sure?</p>
+    </div>
+    <div class="modal-footer">
+      <button class="topbar-btn btn-outline" id="confirm-cancel">Cancel</button>
+      <button class="topbar-btn btn-danger" id="confirm-ok">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PARTNER THOUGHT MODAL
+══════════════════════════════════════════════════════ -->
+<div class="modal-backdrop" id="thought-modal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h3 class="modal-title" id="thought-modal-title">Add Partner Thought</h3>
+      <button class="modal-close" onclick="closeModal('thought-modal')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <form id="thought-form" onsubmit="return false;">
+        <input type="hidden" id="thought-id">
+        <div class="form-grid">
+          <div class="field">
+            <label for="thought-partner">Partner Name *</label>
+            <input type="text" id="thought-partner" placeholder="e.g. Bhaumik Goda" required>
+          </div>
+          <div class="field">
+            <label for="thought-designation">Designation *</label>
+            <input type="text" id="thought-designation" placeholder="e.g. Partner – Tax Advisory" required>
+          </div>
+          <div class="field">
+            <label for="thought-category">Category</label>
+            <select id="thought-category">
+              <option value="Tax Advisory">Tax Advisory</option>
+              <option value="Tax Litigation">Tax Litigation</option>
+              <option value="Transfer Pricing">Transfer Pricing</option>
+              <option value="FEMA">FEMA &amp; Global Advisory</option>
+              <option value="M&A">Mergers &amp; Acquisitions</option>
+              <option value="General">General</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="thought-date">Date</label>
+            <input type="date" id="thought-date">
+          </div>
+          <div class="field form-span-2">
+            <label for="thought-thought">Thought / Quote *</label>
+            <textarea id="thought-thought" rows="4" placeholder="Enter the partner's thought or quote…" required></textarea>
+          </div>
+          <!-- Partner Image Upload Section -->
+          <div class="field form-span-2">
+            <label>Partner Photograph</label>
+            <div class="partner-upload-card">
+              <div class="partner-avatar-preview-wrap">
+                <div class="partner-avatar-preview" id="thought-avatar-preview">
+                  <i class="fa-solid fa-user-tie"></i>
+                </div>
+                <span class="preview-note">Preview</span>
+              </div>
+
+              <div class="partner-upload-body">
+                <!-- Drag & drop / click upload zone -->
+                <div class="partner-dropzone" id="thought-dropzone">
+                  <input type="file" id="thought-image-file" accept="image/png, image/jpeg, image/webp" style="display:none;">
+                  <i class="fa-solid fa-cloud-arrow-up dropzone-icon"></i>
+                  <div class="dropzone-text-group">
+                    <button type="button" class="btn-browse-file" onclick="document.getElementById('thought-image-file').click()">
+                      <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload Photo
+                    </button>
+                    <span class="dropzone-hint">or drag &amp; drop image here (JPG, PNG, WebP)</span>
+                  </div>
+                </div>
+
+                <!-- URL fallback or manual input -->
+                <div class="partner-url-fallback">
+                  <span class="fallback-label">Or use image URL:</span>
+                  <div class="fallback-input-row">
+                    <input type="text" id="thought-image" placeholder="https://... or /assets/images/partner.jpg">
+                    <button type="button" class="topbar-btn btn-outline btn-sm" id="thought-clear-image" style="display:none;" onclick="clearThoughtImage()">
+                      <i class="fa-solid fa-xmark"></i> Remove
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="field form-span-2 status-field-wrap">
+            <div class="toggle-wrap">
+              <label class="toggle">
+                <input type="checkbox" id="thought-published" checked>
+                <span class="toggle-slider"></span>
+              </label>
+              <div>
+                <span class="toggle-label" style="font-weight:600;color:var(--ink);">Publish to Website</span>
+                <span style="font-size:0.75rem;color:var(--muted);display:block;">When enabled, this thought will automatically appear in the homepage carousel.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="topbar-btn btn-outline" onclick="closeModal('thought-modal')">Cancel</button>
+      <button class="topbar-btn btn-primary" onclick="saveThought()">
+        <i class="fa-solid fa-floppy-disk"></i> Save Thought
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     EBOOK MODAL
+══════════════════════════════════════════════════════ -->
+<div class="modal-backdrop" id="ebook-modal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h3 class="modal-title" id="ebook-modal-title">Add eBook</h3>
+      <button class="modal-close" onclick="closeModal('ebook-modal')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <form id="ebook-form" onsubmit="return false;">
+        <input type="hidden" id="ebook-id">
+        <div class="form-grid">
+          <div class="field form-span-2">
+            <label for="ebook-title">eBook Title *</label>
+            <input type="text" id="ebook-title" placeholder="e.g. Transfer Pricing Handbook 2024" required>
+          </div>
+          <div class="field">
+            <label for="ebook-category">Category</label>
+            <select id="ebook-category">
+              <option value="Tax Advisory">Tax Advisory</option>
+              <option value="Transfer Pricing">Transfer Pricing</option>
+              <option value="FEMA">FEMA &amp; Forex</option>
+              <option value="M&A">Mergers &amp; Acquisitions</option>
+              <option value="Litigation">Tax Litigation</option>
+              <option value="General">General</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="ebook-date">Publication Date</label>
+            <input type="date" id="ebook-date">
+          </div>
+          <div class="field form-span-2">
+            <label for="ebook-description">Description</label>
+            <textarea id="ebook-description" rows="3" placeholder="Brief description of this eBook…"></textarea>
+          </div>
+          <div class="field form-span-2">
+            <label for="ebook-url">Download / View URL *</label>
+            <input type="url" id="ebook-url" placeholder="https://drive.google.com/file/d/... or /uploads/ebook.pdf">
+            <span class="field-hint">Paste a Google Drive share link, Dropbox link, or direct PDF path.</span>
+          </div>
+          <div class="field form-span-2">
+            <label for="ebook-cover">Cover Image URL (optional)</label>
+            <input type="text" id="ebook-cover" placeholder="https://... or /assets/images/cover.jpg">
+          </div>
+          <div class="field form-span-2 status-field-wrap">
+            <div class="toggle-wrap">
+              <label class="toggle">
+                <input type="checkbox" id="ebook-published" checked>
+                <span class="toggle-slider"></span>
+              </label>
+              <div>
+                <span class="toggle-label" style="font-weight:600;color:var(--ink);">Publish to Knowledge Bank</span>
+                <span style="font-size:0.75rem;color:var(--muted);display:block;">When enabled, this eBook will be available for readers on the website Knowledge Bank.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="topbar-btn btn-outline" onclick="closeModal('ebook-modal')">Cancel</button>
+      <button class="topbar-btn btn-primary" onclick="saveEbook()">
+        <i class="fa-solid fa-floppy-disk"></i> Save eBook
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PRESENTATION MODAL
+══════════════════════════════════════════════════════ -->
+<div class="modal-backdrop" id="pres-modal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h3 class="modal-title" id="pres-modal-title">Add Presentation</h3>
+      <button class="modal-close" onclick="closeModal('pres-modal')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <form id="pres-form" onsubmit="return false;">
+        <input type="hidden" id="pres-id">
+        <div class="form-grid">
+          <div class="field form-span-2">
+            <label for="pres-title">Presentation Title *</label>
+            <input type="text" id="pres-title" placeholder="e.g. FEMA Compliance Workshop 2024" required>
+          </div>
+          <div class="field">
+            <label for="pres-category">Category</label>
+            <select id="pres-category">
+              <option value="Tax Advisory">Tax Advisory</option>
+              <option value="Transfer Pricing">Transfer Pricing</option>
+              <option value="FEMA">FEMA &amp; Forex</option>
+              <option value="M&A">Mergers &amp; Acquisitions</option>
+              <option value="Seminar">Seminar / Workshop</option>
+              <option value="General">General</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="pres-date">Presentation Date</label>
+            <input type="date" id="pres-date">
+          </div>
+          <div class="field form-span-2">
+            <label for="pres-description">Description</label>
+            <textarea id="pres-description" rows="3" placeholder="Brief description…"></textarea>
+          </div>
+          <div class="field form-span-2">
+            <label for="pres-url">Download / View URL</label>
+            <input type="url" id="pres-url" placeholder="https://drive.google.com/... or /uploads/pres.pptx">
+            <span class="field-hint">Google Drive, SlideShare, or direct file link.</span>
+          </div>
+          <div class="field form-span-2">
+            <label for="pres-embed">SlideShare Embed Code (optional)</label>
+            <textarea id="pres-embed" rows="3" placeholder='<iframe src="https://www.slideshare.net/slideshow/embed_code/key/..." ...></iframe>'></textarea>
+            <span class="field-hint">Paste the full embed code from SlideShare or Google Slides.</span>
+          </div>
+          <div class="field form-span-2 status-field-wrap">
+            <div class="toggle-wrap">
+              <label class="toggle">
+                <input type="checkbox" id="pres-published" checked>
+                <span class="toggle-slider"></span>
+              </label>
+              <div>
+                <span class="toggle-label" style="font-weight:600;color:var(--ink);">Publish to Knowledge Bank</span>
+                <span style="font-size:0.75rem;color:var(--muted);display:block;">When enabled, this presentation deck will be accessible on the website.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="topbar-btn btn-outline" onclick="closeModal('pres-modal')">Cancel</button>
+      <button class="topbar-btn btn-primary" onclick="savePres()">
+        <i class="fa-solid fa-floppy-disk"></i> Save Presentation
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     VIDEO MODAL
+══════════════════════════════════════════════════════ -->
+<div class="modal-backdrop" id="video-modal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h3 class="modal-title" id="video-modal-title">Add YouTube Video</h3>
+      <button class="modal-close" onclick="closeModal('video-modal')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <form id="video-form" onsubmit="return false;">
+        <input type="hidden" id="video-id">
+        <div class="form-grid">
+          <div class="field form-span-2">
+            <label for="video-title">Video Title *</label>
+            <input type="text" id="video-title" placeholder="e.g. Union Budget 2024 – Key Tax Changes" required>
+          </div>
+          <div class="field form-span-2">
+            <label for="video-url">YouTube URL *</label>
+            <input type="url" id="video-url" placeholder="https://www.youtube.com/watch?v=XXXXXXXXXXX" required>
+            <span class="field-hint">Paste the full YouTube watch URL. youtu.be links also work.</span>
+          </div>
+          <div class="field">
+            <label for="video-category">Category</label>
+            <select id="video-category">
+              <option value="Tax Advisory">Tax Advisory</option>
+              <option value="Transfer Pricing">Transfer Pricing</option>
+              <option value="FEMA">FEMA &amp; Forex</option>
+              <option value="M&A">Mergers &amp; Acquisitions</option>
+              <option value="Webinar">Webinar / Seminar</option>
+              <option value="General">General</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="video-date">Published Date</label>
+            <input type="date" id="video-date">
+          </div>
+          <div class="field form-span-2">
+            <label for="video-description">Description</label>
+            <textarea id="video-description" rows="3" placeholder="Brief description of this video…"></textarea>
+          </div>
+          <div class="field form-span-2 status-field-wrap">
+            <div class="toggle-wrap">
+              <label class="toggle">
+                <input type="checkbox" id="video-published" checked>
+                <span class="toggle-slider"></span>
+              </label>
+              <div>
+                <span class="toggle-label" style="font-weight:600;color:var(--ink);">Publish to Website</span>
+                <span style="font-size:0.75rem;color:var(--muted);display:block;">When enabled, this video lecture will be featured on the Knowledge Bank webinar gallery.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="topbar-btn btn-outline" onclick="closeModal('video-modal')">Cancel</button>
+      <button class="topbar-btn btn-primary" onclick="saveVideo()">
+        <i class="fa-solid fa-floppy-disk"></i> Save Video
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     ADMIN JS
+══════════════════════════════════════════════════════ -->
+<script src="admin.js"></script>
+<script>
+// Change password (stored in localStorage with simple hash)
+function changePassword() {
+  const p1 = document.getElementById('set-new-pass').value;
+  const p2 = document.getElementById('set-confirm-pass').value;
+  if (!p1) { toast('Please enter a new password.', 'error'); return; }
+  if (p1 !== p2) { toast('Passwords do not match.', 'error'); return; }
+  if (p1.length < 8) { toast('Password must be at least 8 characters.', 'error'); return; }
+  localStorage.setItem('bgss_admin_pass', p1);
+  document.getElementById('set-new-pass').value = '';
+  document.getElementById('set-confirm-pass').value = '';
+  toast('Password updated. Use new password on next login.');
+  logActivity('Admin password changed', 'crimson');
+}
+
+// Update EmailJS status indicator on dashboard
+function updateDashEJS() {
+  const el = document.getElementById('dash-ejs');
+  if (!el) return;
+  const key = STATE.settings.emailjs_public_key;
+  if (!key || key === 'BGSS_PUBLIC_KEY') {
+    el.innerHTML = '<span class="badge badge-draft">Not configured</span>';
+  } else {
+    el.innerHTML = '<span class="badge badge-success">✓ Configured</span>';
+  }
+}
+// Hook into renderDashboard
+const _origRender = window.renderDashboard;
+document.addEventListener('DOMContentLoaded', () => {
+  const origNav = navigate;
+  // patch
+  window.navigate = function(panel) {
+    origNav(panel);
+    if (panel === 'dashboard') updateDashEJS();
+  };
+  setTimeout(updateDashEJS, 100);
+});
+</script>
+</body>
+</html>

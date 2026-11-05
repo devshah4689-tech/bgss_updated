@@ -1,0 +1,64 @@
+{
+  "settings": {
+    "emailjs_public_key": "BGSS_PUBLIC_KEY",
+    "emailjs_service_id": "BGSS_SERVICE_ID",
+    "emailjs_template_id": "BGSS_TEMPLATE_ID",
+    "contact_email": "devshah4689@gmail.com",
+    "whatsapp_number": "916352392705",
+    "site_phone": "+91 79 4890 4100",
+    "site_phone2": "+91 90999 27783",
+    "site_address": "604, Shiti Ratna Building, Panchwati Circle, C.G. Road, Ahmedabad – 380 009, Gujarat, India.",
+    "site_name": "BGSS & Associates",
+    "linkedin_url": "",
+    "twitter_url": "",
+    "admin_password_hash": "bgss@admin2024"
+  },
+  "partner_thoughts": [
+    {
+      "id": "pt1",
+      "partner": "Bhaumik Goda",
+      "designation": "Partner – Tax Advisory",
+      "thought": "Tax planning is not about avoidance — it is about structuring transactions intelligently within the framework of the law to achieve the best possible outcome for the client.",
+      "category": "Tax Advisory",
+      "date": "2024-11-01",
+      "image": "/assets/images/partner-bhaumik.jpg",
+      "published": true
+    },
+    {
+      "id": "pt2",
+      "partner": "Saumya Sheth",
+      "designation": "Partner – Tax Litigation",
+      "thought": "Every litigation is a story — the taxpayer's story of compliance and intent. Our job is to tell that story compellingly before the highest judicial forums.",
+      "category": "Tax Litigation",
+      "date": "2024-11-01",
+      "image": "/assets/images/partner-saumya.jpg",
+      "published": true
+    },
+    {
+      "id": "pt3",
+      "partner": "Shalibhadra Shah",
+      "designation": "Partner – Transfer Pricing",
+      "thought": "Transfer pricing is where economics meets law. Getting it right requires both a deep understanding of business models and a mastery of regulatory frameworks across jurisdictions.",
+      "category": "Transfer Pricing",
+      "date": "2024-11-01",
+      "image": "/assets/images/partner-shalibhadra.jpg",
+      "published": true
+    },
+    {
+      "id": "pt4",
+      "partner": "Malay Kalavadia",
+      "designation": "Partner – M&A",
+      "thought": "Great M&A deals are built on three pillars: legal certainty, tax efficiency, and commercial pragmatism. Miss any one and the deal crumbles at integration.",
+      "category": "M&A",
+      "date": "2024-11-01",
+      "image": "/assets/images/partner-malay.jpg",
+      "published": true
+    }
+  ],
+  "resources": {
+    "ebooks": [],
+    "presentations": [],
+    "videos": []
+  },
+  "enquiries": []
+}
